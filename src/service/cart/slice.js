@@ -5,7 +5,7 @@ import {
 export const cartSlice = createSlice({
     name: "cart",
     initialState: {
-        products: [
+        products: [ 
             { id: "p1", title: "Product 1", price: 100, qty: 0 },
             { id: "p2", title: "Product 2", price: 200, qty: 0 },
         ],
@@ -35,6 +35,6 @@ export const cartSlice = createSlice({
         }
     }
 })
-const { actions, reducers } = cartSlice
+const { actions } = cartSlice
 export const { addToCart, removeCart } = actions
 // export default reducers
