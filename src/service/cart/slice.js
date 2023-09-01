@@ -6,8 +6,8 @@ export const cartSlice = createSlice({
     name: "cart",
     initialState: {
         products: [
-            { id: "p1", title: "Product 1", price: 0, qty: 0 },
-            { id: "p2", title: "Product 2", price: 0, qty: 0 },
+            { id: "p1", title: "Product 1", price: 100, qty: 0 },
+            { id: "p2", title: "Product 2", price: 200, qty: 0 },
         ],
         totalPrice: 0,
     },

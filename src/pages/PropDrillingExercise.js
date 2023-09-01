@@ -37,7 +37,45 @@ const RootComponent = (props) => {
 
   // Step 3
   // Pass the functions to the product components to handle the click event of the Add/Remove buttons
-
+  function addProductToCart(newProduct, newQty){
+    let totalPrice = 0;
+    let newProducts=[];
+    let found=false;
+    cart.products.forEach(e => {
+      if(e.id===newProduct.id) {
+        newProducts.push({id:newProduct.id,title:newProduct.title,price:newProduct.price,qty:e.qty+newQty});
+        totalPrice+=((e.qty+newQty)*newProduct.price);
+        found=true;
+      }else{
+        newProducts.push(e);
+        totalPrice+=(e.qty*e.price);
+      }
+    });
+    if(found===false){
+      newProducts.push({id:newProduct.id,title:newProduct.title,price:newProduct.price,qty:newQty});
+      totalPrice+=(newQty*newProduct.price);
+    }
+    setCart({products:newProducts, totalPrice});
+  }
+  function removeProductFromCart(newProduct, removeQty){
+    let totalPrice = 0;
+    let newProducts=[];
+    // let found=false;
+    cart.products.forEach(e => {
+      if(e.id===newProduct.id) {
+        newProducts.push({id:newProduct.id,title:newProduct.title,price:newProduct.price,qty:(e.qty-removeQty>0?e.qty-removeQty:0)});
+        if(e.qty-removeQty>0) totalPrice+=((e.qty-removeQty)*newProduct.price);
+        // found=true;
+      }else{
+        newProducts.push(e);
+        totalPrice+=(e.qty*e.price);
+      }
+    });
+    // if(found===false){
+    //   newProducts.push({id:newProduct.id,title:newProduct.title,price:newProduct.price,qty:0});
+    // }
+    setCart({products:newProducts, totalPrice});
+  }
   return (
     <WrapperBox>
       <Typography p="0.5rem" variant="h5" sx={{ backgroundColor: "primary.main", color: "primary.contrastText" }}>
@@ -57,7 +95,7 @@ const RootComponent = (props) => {
       </Box>
       <Grid container spacing={2} p="1rem">
         <Grid item md={6}>
-          <ProductPage products={products} />
+          <ProductPage products={products} fnAdd={addProductToCart} fnRemove={removeProductFromCart} />
         </Grid>
         <Grid item md={6}>
           <CartPage cart={cart} />
@@ -78,10 +116,10 @@ const ProductPage = (props) => {
       </Typography>
       <Grid container spacing={2} p="1rem">
         <Grid item sm={6}>
-          <ProductOne product={props.products[0]} />
+          <ProductOne product={props.products[0]} fnAdd={props.fnAdd} fnRemove={props.fnRemove} />
         </Grid>
         <Grid item sm={6}>
-          <ProductTwo product={props.products[1]} />
+          <ProductTwo product={props.products[1]} fnAdd={props.fnAdd} fnRemove={props.fnRemove} />
         </Grid>
       </Grid>
     </WrapperBox>
@@ -126,10 +164,10 @@ const ProductOne = (props) => {
         </Grid>
         <Grid item xs={8} >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant="success" sx={{ width: "5rem" }} >
+            <Button variant="success" sx={{ width: "5rem" }} onClick={()=>props.fnAdd(props.product,1)} >
               Add
             </Button>
-            <Button variant="error" sx={{ width: "5rem" }}>
+            <Button variant="error" sx={{ width: "5rem" }} onClick={()=>props.fnRemove(props.product,1)}>
               Remove
             </Button>
           </div>
@@ -155,10 +193,10 @@ const ProductTwo = (props) => {
         </Grid>
         <Grid item xs={8} >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant="success" size="sm" style={{ width: "5rem" }}>
+            <Button variant="success" size="sm" style={{ width: "5rem" }} onClick={()=>props.fnAdd(props.product,1)} >
               Add
             </Button>
-            <Button variant="error" size="sm" style={{ width: "5rem" }}>
+            <Button variant="error" size="sm" style={{ width: "5rem" }} onClick={()=>props.fnRemove(props.product,1)} >
               Remove
             </Button>
           </div>
